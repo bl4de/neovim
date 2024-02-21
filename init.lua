@@ -7,8 +7,7 @@ vim.g.maplocalleader = ' '
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
-local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
+local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim' if not vim.loop.fs_stat(lazypath) then
   vim.fn.system {
     'git',
     'clone',
@@ -68,6 +67,17 @@ require('lazy').setup({
     },
   },
 
+  -- Goto-preview
+  {
+    'rmagatti/goto-preview',
+    config = function ()
+      require('goto-preview').setup {
+        height = 40
+      }
+    end
+  },
+
+ 
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -106,9 +116,15 @@ require('lazy').setup({
       signs = {
         add = { text = '|' },
         change = { text = '|' },
-        delete = { text = '|' },
+        delete = { text = '-' },
         topdelete = { text = '|' },
         changedelete = { text = '|' },
+      },
+      signcolumn = true,
+      numhl = true,
+      current_line_blame = true,
+      current_line_blame_opts = {
+        delay = 250
       },
       on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
@@ -142,30 +158,9 @@ require('lazy').setup({
 
         -- Actions
         -- visual mode
-        map('v', '<leader>hs', function()
-          gs.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
-        end, { desc = 'stage git hunk' })
-        map('v', '<leader>hr', function()
-          gs.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
-        end, { desc = 'reset git hunk' })
-        -- normal mode
-        map('n', '<leader>hs', gs.stage_hunk, { desc = 'git stage hunk' })
-        map('n', '<leader>hr', gs.reset_hunk, { desc = 'git reset hunk' })
-        map('n', '<leader>hS', gs.stage_buffer, { desc = 'git Stage buffer' })
-        map('n', '<leader>hu', gs.undo_stage_hunk, { desc = 'undo stage hunk' })
-        map('n', '<leader>hR', gs.reset_buffer, { desc = 'git Reset buffer' })
-        map('n', '<leader>hp', gs.preview_hunk, { desc = 'preview git hunk' })
-        map('n', '<leader>hb', function()
-          gs.blame_line { full = false }
-        end, { desc = 'git blame line' })
-        map('n', '<leader>hd', gs.diffthis, { desc = 'git diff against index' })
-        map('n', '<leader>hD', function()
-          gs.diffthis '~'
-        end, { desc = 'git diff against last commit' })
-
-        -- Toggles
         map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = 'toggle git blame line' })
         map('n', '<leader>td', gs.toggle_deleted, { desc = 'toggle git show deleted' })
+        map('n', '<leader>guc', gs.reset_buffer, {desc = 'undo all changes' })
 
         -- Text object
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'select git hunk' })
@@ -332,6 +327,9 @@ vim.o.termguicolors = true
 
 vim.o.wrap = true
 
+-- Goto-preview
+vim.keymap.set("n", "<leader>gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", {noremap=true})
+
 -- [[ Basic Keymaps ]]
 vim.keymap.set({'n','v'}, '<leader>ls', vim.cmd.Ex)
 -- Keymaps for better default experience
@@ -430,11 +428,11 @@ local function telescope_live_grep_open_files()
 end
 vim.keymap.set('n', '<leader>s/', telescope_live_grep_open_files, { desc = '[S]earch [/] in Open Files' })
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').builtin, { desc = '[S]earch [S]elect Telescope' })
-vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
-vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
+vim.keymap.set('n', '<leader>sg', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
+vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
-vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
-vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
+vim.keymap.set('n', '<leader>fw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
+vim.keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sG', ':LiveGrepGitRoot<cr>', { desc = '[S]earch by [G]rep on Git Root' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
