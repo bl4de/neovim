@@ -55,6 +55,19 @@ require('lazy').setup({
     },
   },
 
+  -- Barbecue
+  {
+    "utilyre/barbecue.nvim",
+    name = "barbecue",
+    version = "*",
+    dependencies = {
+      "SmiteshP/nvim-navic",
+    },
+    opts = {
+      -- configurations go here
+    },
+  },
+
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -160,7 +173,7 @@ require('lazy').setup({
     },
   },
 
---[[   {
+  --[[   {
     -- Theme inspired by Atom
     'navarasu/onedark.nvim',
     priority = 1000,
@@ -174,14 +187,37 @@ require('lazy').setup({
     end,
   },
 ]]
-  {
+  { 
     'kdheepak/monochrome.nvim',
     config = function ()
       vim.cmd 'colorscheme monochrome'
     end
   },
+  --[[  {
+'shaunsingh/nord.nvim',
+config = function ()
+vim.cmd 'colorscheme nord'
+end
+}
 
+  { 
+    'olivercederborg/poimandres.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require('poimandres').setup {
+        -- leave this setup function empty for default config
+        -- or refer to the configuration section
+        -- for configuration options
+      }
+    end,
 
+  -- optionally set the colorscheme within lazy config
+  init = function()
+    vim.cmd("colorscheme poimandres")
+  end
+},
+]]
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
