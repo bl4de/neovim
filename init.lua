@@ -170,26 +170,28 @@ require('lazy').setup({
 
 -- COLOR SCHEMES --
 --
---[[
-{
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    lazy = false,
-    config = function()
-      require('onedark').setup {
-        -- Set a style preset. 'dark' is default.
-        style = 'darker', -- dark, darker, cool, deep, warm, warmer, light
-      }
-      require('onedark').load()
-    end,
-  },
-]]
-
+  --
+ --[[
   { 
     'kdheepak/monochrome.nvim',
     config = function ()
       vim.cmd 'colorscheme monochrome'
+    end
+  },
+]]
+
+  {
+    'rebelot/kanagawa.nvim',
+    config = function ()
+      require('kanagawa').setup({
+        transparent = true,
+        theme = "wave",
+        commentStyle = { italic = true },
+        functionStyle = { italic = false, bold = true},
+        keywordStyle = { italic = false},
+        statementStyle = { bold = true },
+      })
+      vim.cmd("colorscheme kanagawa")
     end
   },
 
@@ -308,7 +310,7 @@ vim.o.termguicolors = true
 vim.o.wrap = true
 
 -- Goto-preview
-vim.keymap.set("n", "<leader>gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", {noremap=true})
+vim.keymap.set("n", "gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", {noremap=true})
 
 -- [[ Basic Keymaps ]]
 vim.keymap.set({'n','v'}, '<leader>ls', vim.cmd.Ex)
@@ -321,8 +323,14 @@ vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = tr
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -- My Keymaps
+-- Move selection up/down
 vim.keymap.set("v", "<C-j>", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "<C-k>", ":m '<-2<CR>gv=gv")
+
+-- Split window
+vim.keymap.set("n", "ss", ":split<Return>", opts)
+vim.keymap.set("n", "sv", ":vsplit<Return>", opts)
+
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -406,11 +414,11 @@ local function telescope_live_grep_open_files()
 end
 vim.keymap.set('n', '<leader>s/', telescope_live_grep_open_files, { desc = '[S]earch [/] in Open Files' })
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').builtin, { desc = '[S]earch [S]elect Telescope' })
-vim.keymap.set('n', '<leader>sg', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
-vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
+vim.keymap.set('n', 'sg', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
+vim.keymap.set('n', 'ff', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
-vim.keymap.set('n', '<leader>fw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
-vim.keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
+vim.keymap.set('n', 'fw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
+vim.keymap.set('n', 'fg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sG', ':LiveGrepGitRoot<cr>', { desc = '[S]earch by [G]rep on Git Root' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
@@ -515,8 +523,7 @@ local on_attach = function(_, bufnr)
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
   nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
   nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-  nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  nmap('ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
