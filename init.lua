@@ -335,6 +335,10 @@ vim.keymap.set("v", "<C-k>", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "ss", ":split<Return>", opts)
 vim.keymap.set("n", "sv", ":vsplit<Return>", opts)
 
+-- Trouble
+vim.keymap.set("n", "gt", ":Trouble<CR>", opts)
+vim.keymap.set("n", "gtf", ":Trouble document_diagnostics<CR>", opts)
+
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
