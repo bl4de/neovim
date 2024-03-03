@@ -255,6 +255,11 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
+  {
+    'stevearc/conform.nvim',
+    opts = {},
+  },
+
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
@@ -330,6 +335,11 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 -- Move selection up/down
 vim.keymap.set("v", "<C-j>", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "<C-k>", ":m '<-2<CR>gv=gv")
+
+vim.keymap.set({"n", "v"}, "<C-l>", "<C-w><C-l>", {desc = "Move focus to the right window"})
+vim.keymap.set({"n", "v"}, "<C-h>", "<C-w><C-h>", {desc = "Move focus to the left window"})
+vim.keymap.set({"n", "v"}, "<C-j>", "<C-w><C-j>", {desc = "Move focus to the bottom window"})
+vim.keymap.set({"n", "v"}, "<C-k>", "<C-w><C-k>", {desc = "Move focus to the top window"})
 
 -- Split window
 vim.keymap.set("n", "ss", ":split<Return>", opts)
