@@ -173,29 +173,59 @@ require('lazy').setup({
   },
 
 -- COLOR SCHEMES --
---
-  --
- --[[
-  { 
-    'kdheepak/monochrome.nvim',
-    config = function ()
-      vim.cmd 'colorscheme monochrome'
-    end
-  },
-]]
-
   {
-    'rebelot/kanagawa.nvim',
-    config = function ()
-      require('kanagawa').setup({
-        transparent = true,
-        theme = "wave",
-        commentStyle = { italic = true },
-        functionStyle = { italic = false, bold = true},
-        keywordStyle = { italic = false},
-        statementStyle = { bold = true },
+    'catppuccin/nvim',
+    config = function()
+      require("catppuccin").setup({
+        flavour = "mocha", -- latte, frappe, macchiato, mocha
+        background = { -- :h background
+          light = "latte",
+          dark = "mocha",
+        },
+        transparent_background = true, -- disables setting the background color.
+        show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
+        term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
+        dim_inactive = {
+          enabled = false, -- dims the background color of inactive window
+          shade = "dark",
+          percentage = 0.15, -- percentage of the shade to apply to the inactive window
+        },
+        no_italic = false, -- Force no italic
+        no_bold = false, -- Force no bold
+        no_underline = false, -- Force no underline
+        styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
+          comments = { "italic" }, -- Change the style of comments
+          conditionals = { "italic" },
+          loops = {},
+          functions = {},
+          keywords = {},
+          strings = {},
+          variables = {},
+          numbers = {},
+          booleans = {},
+          properties = {},
+          types = {},
+          operators = {},
+          -- miscs = {}, -- Uncomment to turn off hard-coded styles
+        },
+        color_overrides = {},
+        custom_highlights = {},
+        integrations = {
+          cmp = true,
+          gitsigns = true,
+          nvimtree = true,
+          treesitter = true,
+          notify = false,
+          mini = {
+            enabled = true,
+            indentscope_color = "",
+          },
+          -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
+        },
       })
-      vim.cmd("colorscheme kanagawa")
+
+      -- setup must be called before loading
+      vim.cmd.colorscheme "catppuccin"
     end
   },
 
@@ -433,7 +463,11 @@ end
 vim.keymap.set('n', '<leader>s/', telescope_live_grep_open_files, { desc = '[S]earch [/] in Open Files' })
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').builtin, { desc = '[S]earch [S]elect Telescope' })
 vim.keymap.set('n', 'sg', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
-vim.keymap.set('n', 'ff', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
+vim.keymap.set('n', 'ff', function()
+  require('telescope.builtin').find_files {
+    follow = true
+  }
+end, {desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', 'fw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', 'fg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
